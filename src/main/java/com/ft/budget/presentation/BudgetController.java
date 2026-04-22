@@ -1,7 +1,6 @@
 package com.ft.budget.presentation;
 
 import com.ft.budget.application.BudgetService;
-import com.ft.budget.domain.AlertType;
 import com.ft.budget.presentation.dto.BudgetResponse;
 import com.ft.budget.presentation.dto.CreateBudgetRequest;
 import com.ft.budget.presentation.dto.UpdateBudgetRequest;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.YearMonth;
 import java.util.List;
+
 
 @Tag(name = "Budget", description = "예산 API")
 @RestController
@@ -70,11 +70,4 @@ public class BudgetController {
         return ApiResponse.noContent();
     }
 
-    @Operation(summary = "예산 알림 체크 (Chain of Responsibility)")
-    @PostMapping("/{budgetId}/alerts")
-    public ApiResponse<List<AlertType>> checkAlerts(
-            @RequestHeader("X-User-Id") Long userId,
-            @PathVariable Long budgetId) {
-        return ApiResponse.success(budgetService.checkAlerts(userId, budgetId));
-    }
 }
