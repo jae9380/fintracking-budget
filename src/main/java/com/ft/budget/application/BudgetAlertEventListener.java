@@ -57,10 +57,10 @@ public class BudgetAlertEventListener implements EventHandler<TransactionCreated
 
         budgetRepository.findByUserIdAndCategoryIdAndYearMonth(
                         event.userId(), event.categoryId(), yearMonthStr)
-                .ifPresent(budget -> checkAndPublishAlerts(budget, saved.getTotalAmount()));
+                .ifPresent(budget -> checkAndPublishAlerts(budget, saved.getTotalAmount(), yearMonthStr, event.categoryName()));
     }
 
-    private void checkAndPublishAlerts(Budget budget, BigDecimal spent) {
+    private void checkAndPublishAlerts(Budget budget, BigDecimal spent, String yearMonth, String categoryName) {
         List<AlertType> sentAlerts = budgetAlertRepository.findSentAlertTypesByBudgetId(budget.getId());
 
         BudgetAlertHandler chain = new Warning50Handler();
@@ -68,6 +68,8 @@ public class BudgetAlertEventListener implements EventHandler<TransactionCreated
 
         List<AlertType> newAlerts = new ArrayList<>();
         chain.handle(budget, spent, sentAlerts, newAlerts);
+
+        BigDecimal usageRate = budget.calculateUsageRate(spent);
 
         newAlerts.forEach(alertType -> {
             budgetAlertRepository.save(BudgetAlert.of(budget, alertType));
@@ -77,13 +79,16 @@ public class BudgetAlertEventListener implements EventHandler<TransactionCreated
                     budget.getUserId(),
                     budget.getId(),
                     budget.getCategoryId(),
+                    categoryName,
                     alertType.name(),
                     spent,
-                    budget.getAmount()
+                    budget.getAmount(),
+                    usageRate,
+                    yearMonth
             ));
 
-            log.info("[BudgetAlert] 예산 알림 발행 — userId={}, budgetId={}, alertType={}, spent={}, limit={}",
-                    budget.getUserId(), budget.getId(), alertType, spent, budget.getAmount());
+            log.info("[BudgetAlert] 예산 알림 발행 — userId={}, budgetId={}, alertType={}, spent={}, limit={}, usageRate={}%",
+                    budget.getUserId(), budget.getId(), alertType, spent, budget.getAmount(), usageRate);
         });
     }
 }

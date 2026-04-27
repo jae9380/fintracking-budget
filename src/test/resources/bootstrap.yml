@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: fintracking-budget
+  profiles:
+    include: ""
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
