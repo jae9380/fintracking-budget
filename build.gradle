@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     // Common
-    implementation 'com.ft:fintracking-common:1.0.7'
+    implementation 'com.ft:fintracking-common:1.0.8'
 
     // Eureka Client
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -66,6 +66,9 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // AOP (메트릭 Aspect 활성화)
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     // Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'

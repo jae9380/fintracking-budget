@@ -14,7 +14,7 @@ public class BudgetAlertEventPublisher extends AbstractEventPublisher<BudgetAler
     }
 
     @Override
-    protected String topic() {
+    public String topic() {
         return KafkaTopic.BUDGET_ALERT;
     }
 }

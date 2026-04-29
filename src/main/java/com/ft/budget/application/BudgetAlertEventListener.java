@@ -15,6 +15,7 @@ import com.ft.common.event.BudgetAlertEvent;
 import com.ft.common.event.TransactionCreatedEvent;
 import com.ft.common.kafka.EventHandler;
 import com.ft.common.kafka.KafkaTopic;
+import com.ft.common.metric.annotation.MonitoredKafka;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -37,6 +38,7 @@ public class BudgetAlertEventListener implements EventHandler<TransactionCreated
     private final MonthlyExpenseRepository monthlyExpenseRepository;
     private final BudgetAlertEventPublisher alertEventPublisher;
 
+    @MonitoredKafka(topic = KafkaTopic.TRANSACTION_CREATED, action = "consume")
     @KafkaListener(topics = KafkaTopic.TRANSACTION_CREATED, groupId = "budget-service")
     @Transactional
     @Override

@@ -8,6 +8,7 @@ import com.ft.budget.application.port.MonthlyExpenseRepository;
 import com.ft.budget.domain.AlertType;
 import com.ft.budget.domain.Budget;
 import com.ft.common.exception.CustomException;
+import com.ft.common.metric.annotation.Monitored;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class BudgetService {
     private final MonthlyExpenseRepository monthlyExpenseRepository;
 
     // 예산 생성
+    @Monitored(domain = "budget", layer = "service", api = "create")
     @Transactional
     public BudgetResult create(Long userId, CreateBudgetCommand command) {
         budgetRepository.findByUserIdAndCategoryIdAndYearMonth(
@@ -40,6 +42,7 @@ public class BudgetService {
     }
 
     // 월별 예산 목록 조회
+    @Monitored(domain = "budget", layer = "service", api = "find_all")
     @Transactional(readOnly = true)
     public List<BudgetResult> findAll(Long userId, YearMonth yearMonth) {
         return budgetRepository.findAllByUserIdAndYearMonth(userId, yearMonth.toString())
@@ -49,6 +52,7 @@ public class BudgetService {
     }
 
     // 예산 단건 조회
+    @Monitored(domain = "budget", layer = "service", api = "find_by_id")
     @Transactional(readOnly = true)
     public BudgetResult findById(Long userId, Long budgetId) {
         Budget budget = getBudget(budgetId);
@@ -57,6 +61,7 @@ public class BudgetService {
     }
 
     // 예산 금액 수정
+    @Monitored(domain = "budget", layer = "service", api = "update_amount")
     @Transactional
     public BudgetResult updateAmount(Long userId, Long budgetId, BigDecimal amount) {
         Budget budget = getBudget(budgetId);
@@ -66,6 +71,7 @@ public class BudgetService {
     }
 
     // 예산 삭제
+    @Monitored(domain = "budget", layer = "service", api = "delete")
     @Transactional
     public void delete(Long userId, Long budgetId) {
         Budget budget = getBudget(budgetId);
