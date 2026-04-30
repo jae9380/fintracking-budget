@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(
         name = "monthly_expenses",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "categoryId", "yearMonth"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "category_id", "year_month"})
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
