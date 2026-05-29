@@ -47,4 +47,8 @@ public class MonthlyExpense extends BaseEntity {
     public void add(BigDecimal amount) {
         this.totalAmount = this.totalAmount.add(amount);
     }
+
+    public void subtract(BigDecimal amount) {
+        this.totalAmount = this.totalAmount.subtract(amount).max(BigDecimal.ZERO);
+    }
 }
